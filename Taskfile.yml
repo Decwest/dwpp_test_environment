@@ -1,0 +1,38 @@
+version: '3'
+
+tasks:
+  default:
+    aliases:
+      - list
+    desc: List all tasks
+    cmd: task -l
+  build:
+    desc: Build docker image
+    cmd: docker compose build dwpp_dev --build-arg USER_ID=$(id -u)
+    silent: true
+  run:
+    desc: Run docker container
+    cmd: docker compose run --rm dwpp_dev
+    silent: true
+  ruff:
+    desc: Run ruff
+    cmds:
+      - ruff check --fix
+      - ruff format
+    silent: true
+  type-check:
+    desc: Check type by pyright
+    cmds:
+      - uv tool run pyright
+    silent: true
+  push:
+    desc: git push
+    cmds:
+      - git add .
+      - git commit
+      - git push origin $(git rev-parse --abbrev-ref HEAD)
+    silent: false
+  pull:
+    desc: git pull
+    cmd: git pull origin $(git rev-parse --abbrev-ref HEAD)
+    silent: false
