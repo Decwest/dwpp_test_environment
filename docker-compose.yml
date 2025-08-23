@@ -1,13 +1,13 @@
 services:
-  dwpp_dev:
+  dwpp_dev_gpu:
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.gpu
       args:
         USER: ${USER}
         USER_ID: ${USER_ID:-1000}
         workspace: "/home/${USER}/ros2_ws"
-    image: "${USER}/dwpp_dev"
+    image: "${USER}/dwpp_dev_gpu"
     runtime: nvidia
     environment:
       - DISPLAY=${DISPLAY}
@@ -16,6 +16,37 @@ services:
       - NVIDIA_DRIVER_CAPABILITIES=all
       - __NV_PRIME_RENDER_OFFLOAD=1
       - __GLX_VENDOR_LIBRARY_NAME=nvidia
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+      - "/home/${USER}/.Xauthority:/home/${USER}/.Xauthority"
+      - "/home/${USER}/.gazebo:/home/${USER}/.gazebo"
+      - "/home/${USER}/.ros:/home/${USER}/.ros"
+      - "${PWD}/docker/initial_setting.sh:/initial_setting.sh"
+      - "${PWD}/docker/ros2_ws:/home/${USER}/ros2_ws/"
+      - "${PWD}/nav2_dynamic_window_pure_pursuit_controller:/home/${USER}/ros2_ws/src/nav2_dynamic_window_pure_pursuit_controller"
+      - "/etc/group:/etc/group:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/media:/media"
+      - "/dev:/dev"
+      - "/lib/modules:/lib/modules:ro"
+      - "/etc/udev:/etc/udev:ro"
+    network_mode: host
+    privileged: true
+    stdin_open: true
+    tty: true
+  dwpp_dev_cpu:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.cpu
+      args:
+        USER: ${USER}
+        USER_ID: ${USER_ID:-1000}
+        workspace: "/home/${USER}/ros2_ws"
+    image: "${USER}/dwpp_dev_cpu"
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
       - "/home/${USER}/.Xauthority:/home/${USER}/.Xauthority"

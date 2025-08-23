@@ -6,13 +6,21 @@ tasks:
       - list
     desc: List all tasks
     cmd: task -l
-  build:
-    desc: Build docker image
-    cmd: docker compose build dwpp_dev --build-arg USER_ID=$(id -u)
+  build.gpu:
+    desc: Build docker image with gpu support
+    cmd: docker compose build dwpp_dev_gpu --build-arg USER_ID=$(id -u)
     silent: true
-  run:
-    desc: Run docker container
-    cmd: docker compose run --rm dwpp_dev
+  build.cpu:
+    desc: Build docker image with cpu support
+    cmd: docker compose build dwpp_dev_cpu --build-arg USER_ID=$(id -u)
+    silent: true
+  run.gpu:
+    desc: Run docker container with gpu support
+    cmd: docker compose run --rm dwpp_dev_gpu
+    silent: true
+  run.cpu:
+    desc: Run docker container with cpu support
+    cmd: docker compose run --rm dwpp_dev_cpu
     silent: true
   ruff:
     desc: Run ruff
