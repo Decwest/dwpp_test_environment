@@ -1,12 +1,12 @@
-# dwpp_dev_environment
+# dwpp_test_environment
 
-A Docker-based environment for developping DWPP Nav2 plugin (**ROS2 Humble**).
+A Docker-based environment for testing DWPP Nav2 plugin (**ROS2 Humble**).
 
 ## Assumption
 
-- Using Nvidia GPU
-- Using Docker, Docker compose and nvidia container toolkit
+- Using Docker, Docker compose for creating virtual environment
 - Using [Task](https://taskfile.dev/docs/installation) for command management
+- If you have GPU: using Nvidia GPU and nvidia-container-toolkit
 
 To install Task on Ubuntu:
 ```shell
@@ -17,20 +17,34 @@ sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/lo
 1. Clone this repository
 
 ```shell
-git clone https://github.com/Decwest/dwpp_dev_environment.git
+git clone https://github.com/Decwest/dwpp_test_environment.git
 ```
 
 2. Build the docker image
+
+- If you only have cpu:
 ```shell
-task build
+task build.cpu
 ```
 
-3. Run the container
+- If you have gpu:
 ```shell
-task run
+task build.gpu
 ```
 
-## Running the Nav2 tutorial
+1. Run the container
+
+- If you only have cpu:
+```shell
+task run.cpu
+```
+
+- If you have gpu:
+```shell
+task run.gpu
+```
+
+## Running the DWPP tutorial
 
 1. Launch the Nav2 tutorial:
 
