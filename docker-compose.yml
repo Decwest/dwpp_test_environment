@@ -1,5 +1,5 @@
 services:
-  dwpp_dev_gpu:
+  dwpp_test_gpu:
     build:
       context: .
       dockerfile: docker/Dockerfile.gpu
@@ -7,7 +7,7 @@ services:
         USER: ${USER}
         USER_ID: ${USER_ID:-1000}
         workspace: "/home/${USER}/ros2_ws"
-    image: "${USER}/dwpp_dev_gpu"
+    image: "${USER}/dwpp_test_gpu"
     runtime: nvidia
     environment:
       - DISPLAY=${DISPLAY}
@@ -35,7 +35,7 @@ services:
     privileged: true
     stdin_open: true
     tty: true
-  dwpp_dev_cpu:
+  dwpp_test_cpu:
     build:
       context: .
       dockerfile: docker/Dockerfile.cpu
@@ -43,7 +43,7 @@ services:
         USER: ${USER}
         USER_ID: ${USER_ID:-1000}
         workspace: "/home/${USER}/ros2_ws"
-    image: "${USER}/dwpp_dev_cpu"
+    image: "${USER}/dwpp_test_cpu"
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1

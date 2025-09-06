@@ -32,7 +32,7 @@ task build.cpu
 task build.gpu
 ```
 
-1. Run the container
+3. Run the container
 
 - If you only have cpu:
 ```shell
