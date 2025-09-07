@@ -75,6 +75,8 @@ ros2 launch nav2_dynamic_window_pure_pursuit_controller dwpp_test.launch.py
 Controller parameters are defined here:
 [🔗 test_params.yaml](https://github.com/Decwest/nav2_dynamic_window_pure_pursuit_controller/blob/main/config/test_params.yaml)
 
+https://github.com/user-attachments/assets/8b3e64e7-5934-4c60-92d2-49a889062489
+
 ## Running the Nav2 Tutorial with DWPP
 
 1. **Launch the Nav2 tutorial**
@@ -99,3 +101,5 @@ Then, from the *Insert* tab, load **TurtleBot3 (Waffle)** and **TurtleBot3 World
 
 Controller parameters are defined here:
 [🔗 example_dwpp_params.yaml](https://github.com/Decwest/nav2_dynamic_window_pure_pursuit_controller/blob/main/config/example_dwpp_params.yaml)
+
+https://github.com/user-attachments/assets/434e6628-9866-43c6-9e35-642a3f0e2842
