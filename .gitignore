@@ -1,3 +1,4 @@
 docker/ros2_ws/*
 !docker/ros2_ws/.gitkeep
 .vscode/
+.env
