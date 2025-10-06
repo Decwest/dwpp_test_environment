@@ -1,8 +1,8 @@
-FROM osrf/ros:jazzy-desktop
+FROM osrf/ros:humble-desktop
 ARG SHELL=/bin/bash
 ARG workspace=/
 
-ENV ROS_DISTRO jazzy
+ENV ROS_DISTRO humble
 ENV USER ${USER}
 
 
@@ -42,37 +42,24 @@ RUN apt update && apt install -y --no-install-recommends \
    nano \
    iproute2 \
    x11-apps \
-   dbus-x11 \
-   gnupg
+   dbus-x11
 
 #######################################################################
 ##                            install nav2                           ##
 #######################################################################
 RUN apt update && apt install -y \
    ros-$ROS_DISTRO-navigation2 \
-   ros-$ROS_DISTRO-nav2-bringup \
-   ros-$ROS_DISTRO-nav2-minimal-tb*
+   ros-$ROS_DISTRO-nav2-bringup
 
 #######################################################################
-##                          install Gazebo                           ##
+##                   install additional packages                     ##
 #######################################################################
 
-RUN curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
-RUN apt-get update
-RUN apt-get install -y gz-harmonic
-RUN apt-get install -y ros-$ROS_DISTRO-ros-gz
-
-#######################################################################
-##                       install nvidia docker                       ##
-#######################################################################
-RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-  && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | apt-key add - \
-  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-RUN apt update \
-  && apt install -y --no-install-recommends nvidia-container-toolkit
-
+RUN apt install -y gazebo \
+  && apt install -y ros-humble-gazebo-* \
+  && apt install -y ros-humble-joint-state-publisher \
+  && apt install -y ros-humble-rqt-* \
+  && apt install -y ros-humble-turtlebot3*
 
 #######################################################################
 ##                            delete cash                            ##
@@ -113,7 +100,7 @@ RUN adduser ${USER} root
 
 USER ${USER}
 
-RUN echo "export PS1='\[\e[1;31;40m\]JAZZY_GPU\[\e[0m\] \u:\w\$ '">> ~/.bashrc
+RUN echo "export PS1='\[\e[1;31;40m\]HUMBLE\[\e[0m\] \u:\w\$ '">> ~/.bashrc
 RUN echo "source /initial_setting.sh">> ~/.bashrc
 
 # setup workspace

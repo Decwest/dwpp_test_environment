@@ -1,10 +1,9 @@
-FROM osrf/ros:humble-desktop
+FROM osrf/ros:rolling-desktop-full
 ARG SHELL=/bin/bash
 ARG workspace=/
 
-ENV ROS_DISTRO humble
+ENV ROS_DISTRO rolling
 ENV USER ${USER}
-
 
 RUN echo base image: ${base_image}
 
@@ -42,35 +41,11 @@ RUN apt update && apt install -y --no-install-recommends \
    nano \
    iproute2 \
    x11-apps \
-   dbus-x11
+   dbus-x11 \
+   gnupg
 
-#######################################################################
-##                            install nav2                           ##
-#######################################################################
-RUN apt update && apt install -y \
-   ros-$ROS_DISTRO-navigation2 \
-   ros-$ROS_DISTRO-nav2-bringup
-
-#######################################################################
-##                   install additional packages                     ##
-#######################################################################
-
-RUN apt install -y gazebo \
-  && apt install -y ros-humble-gazebo-* \
-  && apt install -y ros-humble-joint-state-publisher \
-  && apt install -y ros-humble-rqt-* \
-  && apt install -y ros-humble-turtlebot3*
-
-#######################################################################
-##                       install nvidia docker                       ##
-#######################################################################
-RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-  && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | apt-key add - \
-  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-RUN apt update \
-  && apt install -y --no-install-recommends nvidia-container-toolkit
-
+RUN apt install -y python3-colcon-clean
+RUN apt install -y qt6-base-dev qt6-declarative-dev qt6-scxml-dev qt6-svg-dev qt6-tools-dev qt6-tools-dev-tools
 
 #######################################################################
 ##                            delete cash                            ##
@@ -109,9 +84,10 @@ RUN adduser ${USER} tty
 RUN adduser ${USER} video
 RUN adduser ${USER} root
 
+# change user
 USER ${USER}
 
-RUN echo "export PS1='\[\e[1;31;40m\]HUMBLE_GPU\[\e[0m\] \u:\w\$ '">> ~/.bashrc
+RUN echo "export PS1='\[\e[1;31;40m\]ROLLING\[\e[0m\] \u:\w\$ '">> ~/.bashrc
 RUN echo "source /initial_setting.sh">> ~/.bashrc
 
 # setup workspace
@@ -120,5 +96,17 @@ WORKDIR ${workspace}
 
 # RUN sudo rosdep init
 RUN rosdep update
-RUN bash /opt/ros/$ROS_DISTRO/setup.bash \
-    && colcon build
+
+# COPY nav2 repos
+COPY ../navigation2/ /home/${USER}/ros2_ws/src/navigation2/
+COPY ../nav2_minimal_turtlebot_simulation/ /home/${USER}/ros2_ws/src/nav2_minimal_turtlebot_simulation/
+COPY ../rviz/ /home/${USER}/ros2_ws/src/rviz/
+RUN sudo apt remove -y 'ros-rolling-rviz*'
+
+# rosdep install
+RUN sudo apt update
+RUN rosdep install -r -y \
+  --from-paths /home/${USER}/ros2_ws/src \
+  --ignore-src
+# RUN bash /opt/ros/$ROS_DISTRO/setup.bash \
+#     && colcon build --symlink-install
