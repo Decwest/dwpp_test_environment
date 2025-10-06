@@ -7,33 +7,45 @@ tasks:
     desc: List all tasks
     cmd: task -l
   gen-env:
+    desc: generate .env for docker build
     cmds:
       - bash -c 'printf "USER=%s\nUID=%s\nGID=%s\nGROUP=%s\n" "$USER" "$(id -u)" "$(id -g)" "$(id -gn)" > .env'
-    silent: true
-  build.gpu:
-    desc: Build docker image with gpu support
-    cmd: docker compose build dwpp_test_gpu --build-arg USER_ID=$(id -u)
     silent: true
   build.jazzy.gpu:
     desc: Build docker image with gpu support, jazzy version
     deps: [gen-env]
-    cmd: docker compose build dwpp_test_jazzy_gpu
+    cmd: docker compose build jazzy_gpu
     silent: true
-  build.cpu:
-    desc: Build docker image with cpu support
-    cmd: docker compose build dwpp_test_cpu --build-arg USER_ID=$(id -u)
+  build.jazzy.cpu:
+    desc: Build docker image with cpu support, jazzy version
+    deps: [gen-env]
+    cmd: docker compose build jazzy_cpu
+    silent: true
+  build.humble.gpu:
+    desc: Build docker image with gpu support, humble version
+    deps: [gen-env]
+    cmd: docker compose build humble_gpu
+    silent: true
+  build.humble.cpu:
+    desc: Build docker image with cpu support, humble version
+    deps: [gen-env]
+    cmd: docker compose build humble_cpu
     silent: true
   run.jazzy.gpu:
-    desc: Run docker container with gpu support
-    cmd: docker compose run --rm dwpp_test_jazzy_gpu
+    desc: Run docker container with gpu support, jazzy version
+    cmd: docker compose run --rm jazzy_gpu
     silent: true
-  run.gpu:
-    desc: Run docker container with gpu support
-    cmd: docker compose run --rm dwpp_test_gpu
+  run.jazzy.cpu:
+    desc: Run docker container with cpu support, jazzy version
+    cmd: docker compose run --rm jazzy_cpu
     silent: true
-  run.cpu:
-    desc: Run docker container with cpu support
-    cmd: docker compose run --rm dwpp_test_cpu
+  run.humble.gpu:
+    desc: Run docker container with gpu support, humble version
+    cmd: docker compose run --rm humble_gpu
+    silent: true
+  run.humble.cpu:
+    desc: Run docker container with cpu support, humble version
+    cmd: docker compose run --rm humble_cpu
     silent: true
   ruff:
     desc: Run ruff
