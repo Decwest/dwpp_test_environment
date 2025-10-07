@@ -27,6 +27,7 @@ services:
       - "${PWD}/docker/ros2_ws:/home/ubuntu/ros2_ws/"
       - "${PWD}/navigation2:/home/ubuntu/ros2_ws/src/navigation2"
       - "${PWD}/nav2_minimal_turtlebot_simulation:/home/ubuntu/ros2_ws/src/nav2_minimal_turtlebot_simulation"
+      - "${PWD}/dwpp_test_simulation:/home/ubuntu/ros2_ws/src/dwpp_test_simulation"
       - "${PWD}/rviz:/home/ubuntu/ros2_ws/src/rviz"
       - "/etc/localtime:/etc/localtime:ro"
       - "/media:/media"

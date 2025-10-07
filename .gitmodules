@@ -10,3 +10,6 @@
 [submodule "rviz"]
 	path = rviz
 	url = git@github.com:ros2/rviz.git
+[submodule "dwpp_test_simulation"]
+	path = dwpp_test_simulation
+	url = git@github.com:Decwest/dwpp_test_simulation.git
