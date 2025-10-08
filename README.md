@@ -30,14 +30,8 @@ git clone --recursive https://github.com/Decwest/dwpp_test_environment.git
 
 2. **Build the docker image**
 
-- CPU only:
 ```shell
-task build.cpu
-```
-
-- With GPU:
-```shell
-task build.gpu
+task build
 ```
 
 3. **Run the container**

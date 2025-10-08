@@ -2,12 +2,14 @@ services:
   dwpp_test_gpu:
     build:
       context: .
-      dockerfile: docker/Dockerfile.gpu
+      dockerfile: docker/Dockerfile
       args:
-        USER: ${USER}
-        USER_ID: ${USER_ID:-1000}
-        workspace: "/home/${USER}/ros2_ws"
-    image: "${USER}/dwpp_test_gpu"
+        USER: ubuntu
+        GROUP: ubuntu
+        UID: ${UID}
+        GID: ${GID}
+        workspace: /home/ubuntu/ros2_ws
+    image: "${USER}/dwpp_test"
     runtime: nvidia
     environment:
       - DISPLAY=${DISPLAY}
@@ -18,14 +20,12 @@ services:
       - __GLX_VENDOR_LIBRARY_NAME=nvidia
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
-      - "/home/${USER}/.Xauthority:/home/${USER}/.Xauthority"
-      - "/home/${USER}/.gazebo:/home/${USER}/.gazebo"
-      - "/home/${USER}/.ros:/home/${USER}/.ros"
+      - "/home/${USER}/.Xauthority:/home/ubuntu/.Xauthority"
+      - "/home/${USER}/.gazebo:/home/ubuntu/.gazebo"
+      - "/home/${USER}/.ros:/home/ubuntu/.ros"
       - "${PWD}/docker/initial_setting.sh:/initial_setting.sh"
-      - "${PWD}/docker/ros2_ws:/home/${USER}/ros2_ws/"
-      - "${PWD}/nav2_dynamic_window_pure_pursuit_controller:/home/${USER}/ros2_ws/src/nav2_dynamic_window_pure_pursuit_controller"
-      - "/etc/group:/etc/group:ro"
-      - "/etc/passwd:/etc/passwd:ro"
+      - "${PWD}/docker/ros2_ws:/home/ubuntu/ros2_ws/"
+      - "${PWD}/nav2_dynamic_window_pure_pursuit_controller:/home/ubuntu/ros2_ws/src/nav2_dynamic_window_pure_pursuit_controller"
       - "/etc/localtime:/etc/localtime:ro"
       - "/media:/media"
       - "/dev:/dev"
@@ -38,25 +38,25 @@ services:
   dwpp_test_cpu:
     build:
       context: .
-      dockerfile: docker/Dockerfile.cpu
+      dockerfile: docker/Dockerfile
       args:
-        USER: ${USER}
-        USER_ID: ${USER_ID:-1000}
-        workspace: "/home/${USER}/ros2_ws"
-    image: "${USER}/dwpp_test_cpu"
+        USER: ubuntu
+        GROUP: ubuntu
+        UID: ${UID}
+        GID: ${GID}
+        workspace: /home/ubuntu/ros2_ws
+    image: "${USER}/dwpp_test"
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
-      - "/home/${USER}/.Xauthority:/home/${USER}/.Xauthority"
-      - "/home/${USER}/.gazebo:/home/${USER}/.gazebo"
-      - "/home/${USER}/.ros:/home/${USER}/.ros"
+      - "/home/${USER}/.Xauthority:/home/ubuntu/.Xauthority"
+      - "/home/${USER}/.gazebo:/home/ubuntu/.gazebo"
+      - "/home/${USER}/.ros:/home/ubuntu/.ros"
       - "${PWD}/docker/initial_setting.sh:/initial_setting.sh"
-      - "${PWD}/docker/ros2_ws:/home/${USER}/ros2_ws/"
-      - "${PWD}/nav2_dynamic_window_pure_pursuit_controller:/home/${USER}/ros2_ws/src/nav2_dynamic_window_pure_pursuit_controller"
-      - "/etc/group:/etc/group:ro"
-      - "/etc/passwd:/etc/passwd:ro"
+      - "${PWD}/docker/ros2_ws:/home/ubuntu/ros2_ws/"
+      - "${PWD}/nav2_dynamic_window_pure_pursuit_controller:/home/ubuntu/ros2_ws/src/nav2_dynamic_window_pure_pursuit_controller"
       - "/etc/localtime:/etc/localtime:ro"
       - "/media:/media"
       - "/dev:/dev"

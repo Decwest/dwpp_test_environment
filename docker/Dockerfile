@@ -1,8 +1,4 @@
-FROM ubuntu:22.04
-ARG USER=initial
-ARG GROUP=initial
-ARG UID=1000
-ARG GID=${UID}
+FROM osrf/ros:humble-desktop-full
 ARG SHELL=/bin/bash
 ARG workspace=/
 
@@ -49,39 +45,6 @@ RUN apt update && apt install -y --no-install-recommends \
    dbus-x11
 
 #######################################################################
-##                            install ros2                           ##
-#######################################################################
-# Timezone, Launguage設定
-RUN apt update \
-  && apt install -y --no-install-recommends \
-     locales \
-     software-properties-common tzdata \
-  && locale-gen en_US en_US.UTF-8 \
-  && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
-  && add-apt-repository universe
-
-ENV LANG en_US.UTF-8
-ENV TZ=Asia/Tokyo
-
-# Install ROS2
-RUN apt update
-
-RUN apt update && apt install curl -y && \
-    ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}') && \
-    curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $VERSION_CODENAME)_all.deb" && \
-    dpkg -i /tmp/ros2-apt-source.deb
-
-RUN apt update \
-  && apt upgrade -y \
-  && DEBIAN_FRONTEND=noninteractive \
-  && apt install -y ros-$ROS_DISTRO-desktop \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN apt update && apt install -y ros-dev-tools
-
-RUN sh /opt/ros/$ROS_DISTRO/setup.sh
-
-#######################################################################
 ##                            install nav2                           ##
 #######################################################################
 RUN apt update && apt install -y \
@@ -96,8 +59,8 @@ RUN apt install -y gazebo \
   && apt install -y ros-humble-gazebo-* \
   && apt install -y ros-humble-joint-state-publisher \
   && apt install -y ros-humble-rqt-* \
-  && apt install -y ros-humble-turtlebot3*
-
+  && apt install -y ros-humble-turtlebot3* \
+  && apt install -y python3-colcon-clean
 
 #######################################################################
 ##                            delete cash                            ##
@@ -109,15 +72,23 @@ RUN rm -rf /var/lib/apt/lists/*
 #                         make sudoer user                          ##
 ######################################################################
 
-ARG USER
-ARG USER_ID
- 
-RUN groupadd -g 1000 developer && \
-    useradd  -g      developer -G sudo -m -u ${UID} -s /bin/bash ${USER} && \
-    echo "${USER}:${USER}" | chpasswd
+ARG USER=developer
+ARG UID=1000
+ARG GID=1000
+ARG GROUP=developer
 
-RUN echo "Defaults visiblepw" >> /etc/sudoers
-RUN echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN set -eux; \
+    if getent passwd "${UID}" >/dev/null; then \
+      existing_user="$(getent passwd "${UID}" | cut -d: -f1)"; \
+      [ "${existing_user}" = "${USER}" ] || { echo "UID ${UID} は ${existing_user} が使用中。USER=${USER} と矛盾"; exit 66; }; \
+    else \
+      if ! getent group "${GID}" >/dev/null; then groupadd -g "${GID}" "${GROUP}"; fi; \
+      useradd -m -u "${UID}" -g "${GID}" -s /bin/bash "${USER}"; \
+    fi; \
+    usermod -aG sudo "${USER}"; \
+    echo "${USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}; \
+    chmod 0440 /etc/sudoers.d/${USER}; \
+    visudo -cf /etc/sudoers
 
 #######################################################################
 ##              make user accessible to usb and so on                ##
@@ -129,14 +100,14 @@ RUN adduser ${USER} root
 
 USER ${USER}
 
-RUN echo "export PS1='\[\e[1;31;40m\]DWPP_DEV\[\e[0m\] \u:\w\$ '">> ~/.bashrc
+RUN echo "export PS1='\[\e[1;31;40m\]HUMBLE\[\e[0m\] \u:\w\$ '">> ~/.bashrc
 RUN echo "source /initial_setting.sh">> ~/.bashrc
 
 # setup workspace
 ARG workspace
 WORKDIR ${workspace}
 
-RUN sudo rosdep init
+# RUN sudo rosdep init
 RUN rosdep update
-RUN bash /opt/ros/humble/setup.bash \
+RUN bash /opt/ros/$ROS_DISTRO/setup.bash \
     && colcon build
