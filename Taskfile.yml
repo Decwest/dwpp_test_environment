@@ -11,8 +11,8 @@ tasks:
     cmds:
       - bash -c 'printf "USER=%s\nUID=%s\nGID=%s\nGROUP=%s\n" "$USER" "$(id -u)" "$(id -g)" "$(id -gn)" > .env'
     silent: true
-  build.rolling.gpu:
-    desc: Build docker image with gpu support, rolling version
+  build.rolling:
+    desc: Build docker image, rolling version
     deps: [gen-env]
     cmd: docker compose build rolling_gpu
     silent: true
@@ -39,6 +39,10 @@ tasks:
   run.rolling.gpu:
     desc: Run docker container with gpu support, rolling version
     cmd: docker compose run --rm rolling_gpu
+    silent: true
+  run.rolling.cpu:
+    desc: Run docker container with cpu support, rolling version
+    cmd: docker compose run --rm rolling_cpu
     silent: true
   run.jazzy.gpu:
     desc: Run docker container with gpu support, jazzy version
