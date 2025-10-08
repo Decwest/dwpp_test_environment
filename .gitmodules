@@ -1,3 +1,12 @@
-[submodule "nav2_dynamic_window_pure_pursuit_controller"]
-	path = nav2_dynamic_window_pure_pursuit_controller
-	url = git@github.com:Decwest/nav2_dynamic_window_pure_pursuit_controller.git
+[submodule "navigation2"]
+	path = navigation2
+	url = git@github.com:Decwest/navigation2.git
+[submodule "nav2_minimal_turtlebot_simulation"]
+	path = nav2_minimal_turtlebot_simulation
+	url = git@github.com:ros-navigation/nav2_minimal_turtlebot_simulation.git
+[submodule "rviz"]
+	path = rviz
+	url = git@github.com:ros2/rviz.git
+[submodule "dwpp_test_simulation"]
+	path = dwpp_test_simulation
+	url = git@github.com:Decwest/dwpp_test_simulation.git
