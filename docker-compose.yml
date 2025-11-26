@@ -1,4 +1,36 @@
 services:
+  nav2_docker:
+    image: "ghcr.io/ros-navigation/nav2_docker:rolling-nightly"
+    runtime: nvidia
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - __NV_PRIME_RENDER_OFFLOAD=1
+      - __GLX_VENDOR_LIBRARY_NAME=nvidia
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+      - "/home/${USER}/.Xauthority:/root/.Xauthority"
+      - "/home/${USER}/.gazebo:/root/.gazebo"
+      - "/home/${USER}/.ros:/root/.ros"
+      - "${PWD}/docker/initial_setting.sh:/initial_setting.sh"
+      - "${PWD}/docker/ros2_ws/build:/root/nav2_ws/build"
+      - "${PWD}/docker/ros2_ws/install:/root/nav2_ws/install"
+      - "${PWD}/docker/ros2_ws/log:/root/nav2_ws/log"
+      - "${PWD}/navigation2:/root/nav2_ws/src/navigation2"
+      - "${PWD}/nav2_minimal_turtlebot_simulation:/root/nav2_ws/src/nav2_minimal_turtlebot_simulation"
+      - "${PWD}/dwpp_test_simulation:/root/nav2_ws/src/dwpp_test_simulation"
+      # - "${PWD}/rviz:/root/nav2_ws/src/rviz"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/media:/media"
+      - "/dev:/dev"
+      - "/lib/modules:/lib/modules:ro"
+      - "/etc/udev:/etc/udev:ro"
+    network_mode: host
+    privileged: true
+    stdin_open: true
+    tty: true
   rolling_gpu:
     build:
       context: .
@@ -29,6 +61,7 @@ services:
       - "${PWD}/nav2_minimal_turtlebot_simulation:/home/ubuntu/ros2_ws/src/nav2_minimal_turtlebot_simulation"
       - "${PWD}/dwpp_test_simulation:/home/ubuntu/ros2_ws/src/dwpp_test_simulation"
       - "${PWD}/rviz:/home/ubuntu/ros2_ws/src/rviz"
+      - "${PWD}/BehaviorTree.CPP:/home/ubuntu/ros2_ws/src/BehaviorTree.CPP"
       - "/etc/localtime:/etc/localtime:ro"
       - "/media:/media"
       - "/dev:/dev"

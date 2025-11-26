@@ -10,3 +10,6 @@
 [submodule "dwpp_test_simulation"]
 	path = dwpp_test_simulation
 	url = git@github.com:Decwest/dwpp_test_simulation.git
+[submodule "BehaviorTree.CPP"]
+	path = BehaviorTree.CPP
+	url = https://github.com/BehaviorTree/BehaviorTree.CPP.git

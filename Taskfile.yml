@@ -60,6 +60,10 @@ tasks:
     desc: Run docker container with cpu support, humble version
     cmd: docker compose run --rm humble_cpu
     silent: true
+  nav2:
+    desc: Run nav2 docker container
+    cmd: docker compose run --rm nav2_docker
+    silent: true
   ruff:
     desc: Run ruff
     cmds:
