@@ -31,7 +31,7 @@ sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/lo
 1. **Clone this repository**
 
 ```shell
-git clone --recursive https://github.com/Decwest/dwpp_test_environment.git
+git clone -b humble --recursive https://github.com/Decwest/dwpp_test_environment.git
 ```
 
 2. **Build the docker image**
