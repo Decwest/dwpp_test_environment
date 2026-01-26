@@ -6,9 +6,9 @@
 | **Jazzy** | [`jazzy`](https://github.com/decwest/dwpp_test_environment/tree/jazzy) |
 | **Rolling** | [`feature/nav2_integration`](https://github.com/decwest/dwpp_test_environment/tree/feature/nav2_integration) |
 
-[![ROS2 Distro: Humble](https://img.shields.io/badge/ROS2-Humble-blue.svg)](https://docs.ros.org/en/humble/index.html) [![Docker](https://img.shields.io/badge/Docker-blue.svg)](https://www.docker.com/)
+[![ROS2 Distro: Jazzy](https://img.shields.io/badge/ROS2-Jazzy-blue.svg)](https://docs.ros.org/en/jazzy/index.html) [![Docker](https://img.shields.io/badge/Docker-blue.svg)](https://www.docker.com/)
 
-A **Docker-based environment** for testing the DWPP Nav2 plugin (**ROS2 Humble**).
+A **Docker-based environment** for testing the DWPP Nav2 plugin (**ROS2 Jazzy**).
 
 This repository provides:
 - 📘 Simulations for comparing **DWPP** with conventional methods  
@@ -31,7 +31,7 @@ sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/lo
 1. **Clone this repository**
 
 ```shell
-git clone -b humble --recursive https://github.com/Decwest/dwpp_test_environment.git
+git clone -b jazzy --recursive https://github.com/Decwest/dwpp_test_environment.git
 ```
 
 2. **Build the docker image**

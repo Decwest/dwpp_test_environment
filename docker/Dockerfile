@@ -1,8 +1,8 @@
-FROM osrf/ros:humble-desktop-full
+FROM osrf/ros:jazzy-desktop-full
 ARG SHELL=/bin/bash
 ARG workspace=/
 
-ENV ROS_DISTRO humble
+ENV ROS_DISTRO jazzy
 ENV USER ${USER}
 
 
@@ -49,18 +49,14 @@ RUN apt update && apt install -y --no-install-recommends \
 #######################################################################
 RUN apt update && apt install -y \
    ros-$ROS_DISTRO-navigation2 \
-   ros-$ROS_DISTRO-nav2-bringup
+   ros-$ROS_DISTRO-nav2-bringup \
+   ros-$ROS_DISTRO-nav2-minimal-tb*
 
 #######################################################################
 ##                   install additional packages                     ##
 #######################################################################
 
-RUN apt install -y gazebo \
-  && apt install -y ros-humble-gazebo-* \
-  && apt install -y ros-humble-joint-state-publisher \
-  && apt install -y ros-humble-rqt-* \
-  && apt install -y ros-humble-turtlebot3* \
-  && apt install -y python3-colcon-clean
+RUN apt install -y python3-colcon-clean
 
 #######################################################################
 ##                            delete cash                            ##
@@ -100,7 +96,7 @@ RUN adduser ${USER} root
 
 USER ${USER}
 
-RUN echo "export PS1='\[\e[1;31;40m\]HUMBLE\[\e[0m\] \u:\w\$ '">> ~/.bashrc
+RUN echo "export PS1='\[\e[1;31;40m\]JAZZY\[\e[0m\] \u:\w\$ '">> ~/.bashrc
 RUN echo "source /initial_setting.sh">> ~/.bashrc
 
 # setup workspace
